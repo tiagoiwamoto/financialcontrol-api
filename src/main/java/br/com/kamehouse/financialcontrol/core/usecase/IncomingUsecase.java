@@ -1,6 +1,7 @@
 package br.com.kamehouse.financialcontrol.core.usecase;
 
 import br.com.kamehouse.financialcontrol.adapter.IncomingAdapter;
+import br.com.kamehouse.financialcontrol.core.domain.IncomingDomain;
 import br.com.kamehouse.financialcontrol.entrypoint.dto.IncomingDto;
 import br.com.kamehouse.financialcontrol.entrypoint.dto.QueryDto;
 import br.com.kamehouse.financialcontrol.entrypoint.enumerate.IncomingTypeEnum;
@@ -20,7 +21,7 @@ public class IncomingUsecase {
     @Inject IncomingAdapter incomingAdapter;
 
     public IncomingDto create(IncomingDto incomingDto){
-        var incomingDomain = IncommingMapper.toDomain(incomingDto);
+        var incomingDomain = new IncomingDomain().toCreate(incomingDto);
         incomingDomain.toCreate();
         var response = this.incomingAdapter.saveIncoming(incomingDomain);
         var savedRecord = IncommingMapper.toDto(response);
@@ -29,10 +30,10 @@ public class IncomingUsecase {
 
     public IncomingDto update(IncomingDto incomingDto){
         var oldRecord = this.incomingAdapter.recovery(incomingDto.getUuid());
-        var incomingDomain = IncommingMapper.toDomain(incomingDto);
+        var incomingDomain = new IncomingDomain().toUpdate(incomingDto);
         incomingDomain.toUpdate(oldRecord);
-        var response = this.incomingAdapter.saveIncoming(incomingDomain);
-        var savedRecord = IncommingMapper.toDto(response);
+        this.incomingAdapter.updateIncoming(incomingDomain, incomingDomain.getId());
+        var savedRecord = IncommingMapper.toDto(incomingDomain);
         return savedRecord;
     }
 

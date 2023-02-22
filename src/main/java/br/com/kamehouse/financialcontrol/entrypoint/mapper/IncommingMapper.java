@@ -8,8 +8,7 @@ public class IncommingMapper {
 
     public static IncomingDomain toDomain(IncomingDto incomingDto){
         try{
-            var incomingDomain = new IncomingDomain();
-            BeanUtils.copyProperties(incomingDomain, incomingDto);
+            var incomingDomain = new IncomingDomain().toCreate(incomingDto);
             return incomingDomain;
         }catch (Exception e){
             throw new RuntimeException(); //TODO: Criar custom exception

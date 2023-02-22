@@ -1,9 +1,11 @@
 package br.com.kamehouse.financialcontrol.core.domain;
 
+import br.com.kamehouse.financialcontrol.entrypoint.dto.IncomingDto;
 import br.com.kamehouse.financialcontrol.entrypoint.enumerate.IncomingTypeEnum;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.Entity;
@@ -23,6 +25,7 @@ import java.util.UUID;
 @Table(name = "tbl_incoming")
 @RequiredArgsConstructor
 @Getter
+@Setter
 @ToString
 public class IncomingDomain extends PanacheEntityBase implements Serializable {
 
@@ -38,6 +41,24 @@ public class IncomingDomain extends PanacheEntityBase implements Serializable {
     private String description;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    public IncomingDomain toCreate(IncomingDto incomingDto) {
+        this.data = incomingDto.getData();
+        this.type = incomingDto.getType();
+        this.amount = incomingDto.getAmount();
+        this.description = incomingDto.getDescription();
+        return this;
+    }
+
+    public IncomingDomain toUpdate(IncomingDto incomingDto) {
+        this.data = incomingDto.getData();
+        this.type = incomingDto.getType();
+        this.amount = incomingDto.getAmount();
+        this.description = incomingDto.getDescription();
+        this.uuid = incomingDto.getUuid();
+        this.id = incomingDto.getId();
+        return this;
+    }
 
     public void toCreate(){
         this.uuid = UUID.randomUUID();

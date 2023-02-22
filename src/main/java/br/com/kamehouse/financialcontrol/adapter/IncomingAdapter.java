@@ -5,6 +5,7 @@ import br.com.kamehouse.financialcontrol.entrypoint.enumerate.IncomingTypeEnum;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.panache.common.Sort;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.beanutils.BeanUtils;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
@@ -21,9 +22,24 @@ public class IncomingAdapter {
     public IncomingDomain saveIncoming(IncomingDomain incomingDomain){
         log.info("iniciando gravação no banco de dados");
         try{
-            incomingDomain.persist();
+            incomingDomain.persistAndFlush();
             log.info("incoming gravado com sucesso, {}", incomingDomain);
             return incomingDomain;
+        }catch (Exception e){
+            log.error("falha ao gravar incoming, {}", e);
+            throw new RuntimeException(); //TODO: Criar exception
+        }
+    }
+
+    @Transactional
+    public IncomingDomain updateIncoming(IncomingDomain incomingDomain, Long id){
+        log.info("iniciando gravação no banco de dados");
+        try{
+            IncomingDomain domain = IncomingDomain.findById(id);
+            BeanUtils.copyProperties(domain, incomingDomain);
+
+            log.info("incoming gravado com sucesso, {}", domain);
+            return domain;
         }catch (Exception e){
             log.error("falha ao gravar incoming, {}", e);
             throw new RuntimeException(); //TODO: Criar exception
@@ -57,13 +73,16 @@ public class IncomingAdapter {
     public IncomingDomain recovery(UUID uuid){
         log.info("iniciando recuperação de incoming no banco de dados");
         try{
-            PanacheQuery<IncomingDomain> response = IncomingDomain.find("select * from tbl_incoming where uuid = ".concat(uuid.toString()));
+            Map<String, Object> params = new HashMap<>();
+            params.put("uuid", uuid);
+            PanacheQuery<IncomingDomain> response = IncomingDomain.find("uuid = :uuid", params);
             return response.firstResultOptional().orElseThrow();
         }catch (Exception e){
             throw new RuntimeException(); //TODO: Criar exception
         }
     }
 
+    @Transactional
     public void removeIncoming(IncomingDomain incomingDomain){
         log.info("iniciando remoção de incomings no banco de dados");
         try{
