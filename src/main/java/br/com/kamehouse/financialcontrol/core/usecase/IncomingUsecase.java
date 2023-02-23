@@ -5,7 +5,7 @@ import br.com.kamehouse.financialcontrol.core.domain.IncomingDomain;
 import br.com.kamehouse.financialcontrol.entrypoint.dto.IncomingDto;
 import br.com.kamehouse.financialcontrol.entrypoint.dto.QueryDto;
 import br.com.kamehouse.financialcontrol.entrypoint.enumerate.IncomingTypeEnum;
-import br.com.kamehouse.financialcontrol.entrypoint.mapper.IncommingMapper;
+import br.com.kamehouse.financialcontrol.entrypoint.mapper.IncomingMapper;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -24,7 +24,7 @@ public class IncomingUsecase {
         var incomingDomain = new IncomingDomain().toCreate(incomingDto);
         incomingDomain.toCreate();
         var response = this.incomingAdapter.saveIncoming(incomingDomain);
-        var savedRecord = IncommingMapper.toDto(response);
+        var savedRecord = IncomingMapper.toDto(response);
         return savedRecord;
     }
 
@@ -33,13 +33,13 @@ public class IncomingUsecase {
         var incomingDomain = new IncomingDomain().toUpdate(incomingDto);
         incomingDomain.toUpdate(oldRecord);
         this.incomingAdapter.updateIncoming(incomingDomain, incomingDomain.getId());
-        var savedRecord = IncommingMapper.toDto(incomingDomain);
+        var savedRecord = IncomingMapper.toDto(incomingDomain);
         return savedRecord;
     }
 
     public List<IncomingDto> recoveryRecords(){
         var recordsDomain = this.incomingAdapter.recoveryAllIncoming();
-        var records = recordsDomain.stream().map(record -> IncommingMapper.toDto(record)).collect(Collectors.toList());
+        var records = recordsDomain.stream().map(record -> IncomingMapper.toDto(record)).collect(Collectors.toList());
         return records;
     }
 
@@ -63,7 +63,7 @@ public class IncomingUsecase {
 
         }
         var recordsDomain = this.incomingAdapter.recoveryIncomingOf(params, query);
-        var records = recordsDomain.stream().map(record -> IncommingMapper.toDto(record)).collect(Collectors.toList());
+        var records = recordsDomain.stream().map(record -> IncomingMapper.toDto(record)).collect(Collectors.toList());
         return records;
     }
 

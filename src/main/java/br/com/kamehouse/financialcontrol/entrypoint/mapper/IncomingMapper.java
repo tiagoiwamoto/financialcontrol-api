@@ -4,7 +4,7 @@ import br.com.kamehouse.financialcontrol.core.domain.IncomingDomain;
 import br.com.kamehouse.financialcontrol.entrypoint.dto.IncomingDto;
 import org.apache.commons.beanutils.BeanUtils;
 
-public class IncommingMapper {
+public class IncomingMapper {
 
     public static IncomingDomain toDomain(IncomingDto incomingDto){
         try{
