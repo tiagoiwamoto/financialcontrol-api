@@ -6,15 +6,6 @@ import org.apache.commons.beanutils.BeanUtils;
 
 public class IncomingMapper {
 
-    public static IncomingDomain toDomain(IncomingDto incomingDto){
-        try{
-            var incomingDomain = new IncomingDomain().toCreate(incomingDto);
-            return incomingDomain;
-        }catch (Exception e){
-            throw new RuntimeException(); //TODO: Criar custom exception
-        }
-    }
-
     public static IncomingDto toDto(IncomingDomain incomingDomain){
         try{
             var incomingDto = new IncomingDto();

@@ -6,15 +6,6 @@ import org.apache.commons.beanutils.BeanUtils;
 
 public class ExpenseMapper {
 
-    public static ExpenseDomain toDomain(ExpenseDto expenseDto){
-        try{
-            var expenseDomain = new ExpenseDomain().toCreate(expenseDto);
-            return expenseDomain;
-        }catch (Exception e){
-            throw new RuntimeException(); //TODO: Criar custom exception
-        }
-    }
-
     public static ExpenseDto toDto(ExpenseDomain expenseDomain){
         try{
             var expenseDto = new ExpenseDto();
